@@ -75,7 +75,7 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
                     senha: user.senha.value,
                     nome_usuario: user.nome_usuario.value,
                 })
-                .then(({ data }) => toast.sucess(data))
+                .then(({ data }) => toast.success(data))
                 .catch(({ data}) => toast.error(data));
         } else {
             await axios
@@ -85,7 +85,7 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
                     senha: user.senha.value,
                     nome_usuario: user.nome_usuario.value,
                 })
-                .then(({ data }) => toast.sucess(data))
+                .then(({ data }) => toast.success(data))
                 .catch(({ data}) => toast.error(data));
         }
 
