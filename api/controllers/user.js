@@ -1,7 +1,7 @@
 import { db } from "../db.js";
 
 export const getUsers = (_, res) => {
-    const q = "SELECT * FROM usuarios";
+    const q = "SELECT * FROM usuarios WHERE `ativo` = 1";
 
     db.query(q, (err, data) => {
         if (err) return res.json(err);
@@ -11,21 +11,29 @@ export const getUsers = (_, res) => {
 };
 
 export const addUser = (req, res) => {
-    const q = "INSERT INTO usuarios(`nome`, `email`, `senha`, `nome_usuario`) VALUES(?)";
-
+    const checkQuery = "SELECT * FROM usuarios WHERE nome = ? AND email = ?";
     const values = [
+        req.body.nome,
+        req.body.email
+    ];
+
+    const insertQuery = "INSERT INTO usuarios (nome, email, senha, nome_usuario, ativo) VALUES (?, ?, ?, ?, ?)";
+    const insertValues = [
         req.body.nome,
         req.body.email,
         req.body.senha,
         req.body.nome_usuario,
+        1 // Define o novo registro como ativo (ativo = 1)
     ];
 
-    db.query(q, [values], (err) => {
+    db.query(insertQuery, insertValues, (err) => {
         if (err) return res.json(err);
 
         return res.status(200).json("Usuário criado com sucesso.");
     });
 };
+
+
 
 export const updateUser = (req, res) => {
     const q = "UPDATE usuarios SET `nome` = ?, `email` = ?, `senha` = ?, `nome_usuario` = ? WHERE `id` = ?";
@@ -45,11 +53,11 @@ export const updateUser = (req, res) => {
 };
 
 export const deleteUser = (req, res) => {
-    const q = "DELETE FROM usuarios WHERE `Id` = ?";
+    const q = "UPDATE usuarios SET ativo = ? WHERE Id = ?";
 
-    db.query(q, [req.params.id], (err) => {
+    db.query(q, [0, req.params.id], (err) => {
         if (err) return res.json(err);
 
-        return res.status(200).json("Usuário deletado com sucesso.");
+        return res.status(200).json("Usuário inativado com sucesso.");
     });
 };

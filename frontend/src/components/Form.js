@@ -74,36 +74,60 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
             return toast.error("A senha deve ter no mímino 6 caracteres, incluindo um número, uma letra e um caractere especial!");
         }
 
-        if (onEdit) {
+        const nome = user.nome.value;
+        const email = user.email.value;
+      
+        try {
+          // Verifica se o usuário já está cadastrado pelo campo de nome ou e-mail
+          const response = await axios.get(
+            `http://localhost:8800?nome=${encodeURIComponent(
+              nome
+            )}&email=${encodeURIComponent(email)}`
+          );
+          const usuariosCadastrados = response.data;
+      
+          const usuarioExistente = usuariosCadastrados.find(
+            (usuario) => usuario.nome === nome || usuario.email === email
+          );
+      
+          if (usuarioExistente) {
+            return toast.error("Usuário já cadastrado.");
+          }
+      
+          if (onEdit) {
             await axios
-                .put("http://localhost:8800/" + onEdit.id, {
-                    nome: user.nome.value,
-                    email: user.email.value,
-                    senha: user.senha.value,
-                    nome_usuario: user.nome_usuario.value,
-                })
-                .then(({ data }) => toast.success(data))
-                .catch(({ data}) => toast.error(data));
-        } else {
+              .put(`http://localhost:8800/${onEdit.id}`, {
+                nome: user.nome.value,
+                email: user.email.value,
+                senha: user.senha.value,
+                nome_usuario: user.nome_usuario.value,
+              })
+              .then(({ data }) => toast.success(data))
+              .catch(({ data }) => toast.error(data));
+          } else {
             await axios
-            .post("http://localhost:8800", {
-                    nome: user.nome.value,
-                    email: user.email.value,
-                    senha: user.senha.value,
-                    nome_usuario: user.nome_usuario.value,
-                })
-                .then(({ data }) => toast.success(data))
-                .catch(({ data}) => toast.error(data));
+              .post("http://localhost:8800", {
+                nome: user.nome.value,
+                email: user.email.value,
+                senha: user.senha.value,
+                nome_usuario: user.nome_usuario.value,
+              })
+              .then(({ data }) => toast.success(data))
+              .catch(({ data }) => toast.error(data));
+          }
+      
+          user.nome.value = "";
+          user.email.value = "";
+          user.senha.value = "";
+          user.nome_usuario.value = "";
+      
+          setOnEdit(null);
+          getUsers();
+        } catch (error) {
+          toast.error("Ocorreu um erro ao verificar o usuário cadastrado.");
+          console.error(error);
         }
-
-        user.nome.value = "";
-        user.email.value = "";
-        user.senha.value = "";
-        user.nome_usuario.value = "";
-
-        setOnEdit(null);
-        getUsers();
-    };
+      };
 
     return (
         <FormContainer ref={ref} onSubmit={handleSubmit}>
