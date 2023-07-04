@@ -67,6 +67,13 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
             return toast.warn("Preencha todos os campos!");
         }
 
+        // Validação da senha
+        const senha = user.senha.value;
+        const senhaRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+        if (!senhaRegex.test(senha)) {
+            return toast.error("A senha deve ter no mímino 6 caracteres, incluindo um número, uma letra e um caractere especial!");
+        }
+
         if (onEdit) {
             await axios
                 .put("http://localhost:8800/" + onEdit.id, {
