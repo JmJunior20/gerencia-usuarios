@@ -12,6 +12,12 @@ const FormContainer = styled.form`
     padding: 20px;
     box-shadow: 0px 0px 5px #ccc;
     border-radius: 5px;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      width: 80%;
+  }
 `;
 
 const InputArea = styled.div`
@@ -25,6 +31,10 @@ const Input = styled.input`
     border: 1px solid #bbb;
     border-radius: 5px;
     height: 40px;
+
+    @media (max-width: 768px) {
+      width: 90%;
+    }
 `;
 
 const Label = styled.label``;
@@ -37,6 +47,10 @@ const Button = styled.button`
     background-color: #2c73d2;
     color: white;
     height: 42px;
+
+    @media (max-width: 768px) {
+      width: 65%;
+    }
 `;
 
 const Form = ({ getUsers, onEdit, setOnEdit }) => {

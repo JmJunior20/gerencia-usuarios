@@ -23,14 +23,23 @@ export const Tr = styled.tr``;
 
 export const Th = styled.th`
     text-align: start;
-    border-bottom: inset;
+    border-bottom: groove;
     padding-bottom: 5px;
 `;
 
 export const Td = styled.td`
     padding-top: 15px;
+    border-bottom: inset;
     text-align: ${(props) => (props.alignCenter ? "center" : "start")};
     width: ${(props) => (props.width ? props.width : "auto")};
+
+    @media (max-width: 768px) {
+        text-align: center;
+        width: auto;
+        font-size: 14px;
+        white-space: normal;
+        word-break: break-word;
+    }
 `;
 
 const Grid = ({ users, setUsers, setOnEdit }) => {
@@ -58,7 +67,7 @@ const Grid = ({ users, setUsers, setOnEdit }) => {
                 <Tr>
                     <Th>Nome</Th>
                     <Th>Email</Th>
-                    <Th>Nome do Usuário</Th>
+                    <Th>Usuário</Th>
                     <Th></Th>
                     <Th></Th>
                 </Tr>
