@@ -23,7 +23,7 @@ export const addUser = (req, res) => {
         req.body.email,
         req.body.senha,
         req.body.nome_usuario,
-        1 // Define o novo registro como ativo (ativo = 1)
+        1
     ];
 
     db.query(insertQuery, insertValues, (err) => {
@@ -58,6 +58,6 @@ export const deleteUser = (req, res) => {
     db.query(q, [0, req.params.id], (err) => {
         if (err) return res.json(err);
 
-        return res.status(200).json("Usuário inativado com sucesso.");
+        return res.status(200).json("Usuário excluído com sucesso.");
     });
 };
